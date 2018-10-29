@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SortAlgos.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AssignmrntUnitTest</a> &gt; <a href="index.source.html" class="el_package">com.test</a> &gt; <span class="el_source">SortAlgos.java</span></div><h1>SortAlgos.java</h1><pre class="source lang-java linenums">package com.test;
+
+/** 
+ * A collection of various sorting algorithms for sorting an array
+ * of items with int key
+ */
+
+<span class="nc" id="L8">public final class SortAlgos {</span>
+
+        /**
+         * Sorts with bubblesort algorithm
+         * 
+         * Returns a NullPointerException when the array is empty
+         * Returns a sorted array with the same length as the initial array
+         * 
+         * @param vec the array to be sorted
+	     * @exception NullPointerException if &lt;code&gt;vec&lt;/code&gt; 
+	     * is not initialized
+         */
+        public static void bubbleSort(Item[] vec) 
+                            throws NullPointerException {
+<span class="fc bfc" id="L22" title="All 2 branches covered.">                if (vec == null) throw new NullPointerException();</span>
+        
+<span class="fc" id="L24">		        int n = vec.length; // EDIT: Removed the -1 due to incorrect sort method</span>
+		        Item temp;
+                int bottom;       // bottom for each pass        
+<span class="fc bfc" id="L27" title="All 2 branches covered.">                for (bottom = 1; bottom &lt; n; bottom++)  {</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">                        for (int i = n-1; i &gt;= bottom; i--) {</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">                                if (vec[i-1].key &gt; vec[i].key) {</span>
+<span class="fc" id="L30">                                        temp = vec[i-1];</span>
+<span class="fc" id="L31">                                        vec[i-1] = vec[i];</span>
+<span class="fc" id="L32">                                        vec[i] = temp;</span>
+                                }
+                        }
+                }
+<span class="fc" id="L36">        }</span>
+    
+        /**
+         * Sorts with selectionsort algorithm
+         * @param vec the array to be sorted
+         * @exception NullPointerException if &lt;code&gt;vec&lt;/code&gt; 
+         * is not initialized
+         */
+        public static void selectionSort(Item vec[]) 
+                            throws NullPointerException {
+<span class="fc bfc" id="L46" title="All 2 branches covered.">                if (vec == null) throw new NullPointerException();</span>
+                
+                int minIndx;            // Index of smallest key in each pass
+                int bottom;             // bottom for each pass
+                int i;
+                Item temp;
+<span class="fc" id="L52">                int n = vec.length;</span>
+            
+<span class="fc bfc" id="L54" title="All 2 branches covered.">                for (bottom = 0; bottom &lt; n-1; bottom++) {</span>
+                             //  INVARIANT (prior to test):
+                             //  All vec[bottom+1..n-1] are &gt;= vec[bottom]
+                             //  &amp;&amp; vec[0..bottom] are in ascending order
+                             //  &amp;&amp; bottom &gt;= 0
+<span class="fc" id="L59">                        minIndx = bottom;</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">                        for (i = bottom+1; i &lt; n; i++) {</span>
+                                    // INVARIANT (prior to test):
+                                    // vec[minIndx] &lt;= all
+                                    // vec[0..i-1]
+                                    // &amp;&amp; i &gt;= bottom+1
+<span class="fc bfc" id="L65" title="All 2 branches covered.">                                if (vec[i].key &lt; vec[minIndx].key) { </span>
+<span class="fc" id="L66">                                        minIndx = i; </span>
+                                }
+                        }
+<span class="fc" id="L69">                        temp = vec[bottom];</span>
+<span class="fc" id="L70">                        vec[bottom] = vec[minIndx];</span>
+<span class="fc" id="L71">                        vec[minIndx] = temp; </span>
+                }
+<span class="fc" id="L73">        }</span>
+    
+        /**
+         * Sorts with insertionsort algorithm
+         * @param vec the array to be sorted
+         * @exception NullPointerException if &lt;code&gt;vec&lt;/code&gt; 
+         * is not initialized
+         */
+        public static void insertionSort(Item vec[]) 
+                        throws NullPointerException {
+<span class="fc bfc" id="L83" title="All 2 branches covered.">                if (vec == null) throw new NullPointerException();</span>
+<span class="fc" id="L84">                int n = vec.length;</span>
+                int currentPos, insPos; 
+<span class="fc bfc" id="L86" title="All 2 branches covered.">                for (currentPos = 1; currentPos &lt; n; currentPos++) {</span>
+<span class="fc" id="L87">                        insPos = findInsPosition(vec, currentPos - 1, </span>
+                                        vec[currentPos].key);
+<span class="fc" id="L89">                        insertAtPosition(vec, insPos, currentPos);</span>
+                }   
+<span class="fc" id="L91">        }</span>
+        
+        /**
+         * Finds insertion position with binary search
+         * @param vec the array to be sorted
+         * @param range upper bound for insertion position
+         * @param x the value determining the position 
+         * @return the insertion position 
+         */
+        private static int findInsPosition(Item[] vec, int range, int x) {
+                int index;   // variable to hold the position
+                int i,j,k;
+<span class="fc" id="L103">                i = 0; j = range; // initialize lower index i and upper index j</span>
+                do { 
+<span class="fc" id="L105">                        k = (i + j) / 2;  // choose k halfway between i and j</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">                        if (x &gt;= vec[k].key) { </span>
+<span class="fc" id="L107">                                i = k + 1;   // update lower index i</span>
+                        } else {                 
+<span class="fc" id="L109">                                j = k - 1;   // update upper index j</span>
+                        }
+<span class="fc bfc" id="L111" title="All 2 branches covered.">                } while (i &lt;= j);</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">                if (x &gt;= vec[k].key) {</span>
+<span class="fc" id="L113">                        index = k + 1;</span>
+                } else  {                   
+<span class="fc" id="L115">                        index = k;</span>
+                }
+<span class="fc" id="L117">                return index;</span>
+        }
+        
+        /**
+         * Inserts array component into a sorted range below the component
+         * such that the result is again sorted
+         * @param vec the array in which this happens
+         * @param insPos the insertion position
+         * @param fromPos the position whose value 
+         * has to be inserted at &lt;code&gt;insPos&lt;/code&gt;
+         */
+        private static void insertAtPosition(Item[] vec, int insPos, 
+                                                         int fromPos ) {
+<span class="fc bfc" id="L130" title="All 2 branches covered.">                if (insPos == fromPos) return;</span>
+<span class="fc" id="L131">                Item temp = vec[fromPos];</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">                for (int i = fromPos; i &gt; insPos; i--) vec[i] = vec[i-1];</span>
+<span class="fc" id="L133">                vec[insPos] = temp;</span>
+<span class="fc" id="L134">        }</span>
+    
+    
+        /**
+         * Sorts with mergesort algorithm
+         * @param vec the array to be sorted
+         * @exception NullPointerException if &lt;code&gt;vec&lt;/code&gt; 
+         * is not initialized
+         */
+        public static void mergeSort(Item vec[]) 
+                                throws NullPointerException {
+<span class="fc bfc" id="L145" title="All 2 branches covered.">                if (vec == null) throw new NullPointerException();</span>
+<span class="fc" id="L146">                mergeSort(vec, 0, vec.length - 1);</span>
+<span class="fc" id="L147">        }</span>
+        
+        
+        /**
+         * merges two sorted adjacent ranges of an array
+         * @param vec the array in which this happens
+         * @param left start of the first range
+         * @param middle end of the first range
+         * @param right end of the second range
+         */
+        private static void merge(Item[] vec, int left, int middle, int right) {
+                int i, j;
+<span class="fc" id="L159">                int m = middle - left + 1; // length of first array region</span>
+<span class="fc" id="L160">                int n = right - middle;    // length of second array region</span>
+            
+                // make copies of array regions to be merged 
+                // (only the references to the items)
+<span class="fc" id="L164">                Item[] copy1 = new Item[m];</span>
+<span class="fc" id="L165">                Item[] copy2 = new Item[n];</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">                for (i = 0; i &lt; m; i++) copy1[i] = vec[left + i]; </span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">                for (j = 0; j &lt; n; j++) copy2[j] = vec[middle + 1 + j]; </span>
+                    
+<span class="fc" id="L169">                i = 0; j = 0;   </span>
+                // merge copy1 and copy2 into  vec[left...right]
+<span class="fc bfc" id="L171" title="All 4 branches covered.">                while (i &lt; m &amp;&amp; j &lt; n) {</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">                        if (copy1[i].key &lt; copy2[j].key) {</span>
+<span class="fc" id="L173">                                vec[left+i+j] = copy1[i];</span>
+<span class="fc" id="L174">                                i++;</span>
+                        } else {
+<span class="fc" id="L176">                                vec[left+i+j] = copy2[j];</span>
+<span class="fc" id="L177">                                j++;</span>
+                        }//endif
+                }//endwhile
+<span class="fc bfc" id="L180" title="All 2 branches covered.">                if (j == n) { // second array region is completely handled, </span>
+                              // so copy rest of first region
+<span class="fc bfc" id="L182" title="All 2 branches covered.">                        while (i &lt; m) {</span>
+<span class="fc" id="L183">                                vec[left+i+j] = copy1[i];</span>
+<span class="fc" id="L184">                                i++;</span>
+                        }
+                }
+                // if (i == m) do nothing, 
+                // rest of second region is already in place
+<span class="fc" id="L189">        }</span>
+        
+        /**
+         * sorts array by mergesort in a certain range
+         * @param vec the array in which this happens
+         * @param first start of the range
+         * @param last end of the range
+         */
+        private static void mergeSort(Item[] vec, int first, int last) {
+<span class="fc bfc" id="L198" title="All 2 branches covered.">                if (first == last) return;	</span>
+                // devide vec into 2 equal parts
+<span class="fc" id="L200">                int middle = (first + last) / 2; </span>
+<span class="fc" id="L201">                mergeSort(vec, first, middle);   // sort the first part</span>
+<span class="fc" id="L202">                mergeSort(vec, middle+1, last);  // sort the second part</span>
+<span class="fc" id="L203">                merge(vec, first, middle, last); // merge the 2 sorted parts</span>
+<span class="fc" id="L204">        }</span>
+    
+    
+        /**
+         * Sorts with quicksort algorithm
+         * @param vec the array to be sorted
+         * @exception NullPointerException if &lt;code&gt;vec&lt;/code&gt; 
+         * is not initialized
+         */
+        public static void quickSort(Item[] vec) 
+                                throws NullPointerException {
+<span class="fc bfc" id="L215" title="All 2 branches covered.">                if (vec == null) throw new NullPointerException();</span>
+<span class="fc" id="L216">                quickSort(vec, 0, vec.length - 1);</span>
+<span class="fc" id="L217">        }</span>
+        
+        /**
+         * sorts array by quicksort in a certain range
+         * @param vec the array in which this happens
+         * @param loBound start of the range
+         * @param hiBound end of the range
+         */
+        private static void quickSort(Item[] vec, int loBound, int hiBound) {
+                int loSwap, hiSwap;
+                int pivotKey, pivotIndex;
+                Item temp, pivotItem;
+        
+<span class="fc bfc" id="L230" title="All 2 branches covered.">                if (hiBound - loBound == 1) {         // Two items to sort</span>
+<span class="pc bpc" id="L231" title="1 of 2 branches missed.">                        if (vec[loBound].key &gt; vec[hiBound].key) {</span>
+<span class="fc" id="L232">                                temp = vec[loBound];</span>
+<span class="fc" id="L233">                                vec[loBound] = vec[hiBound];</span>
+<span class="fc" id="L234">                                vec[hiBound] = temp;</span>
+                        }
+<span class="fc" id="L236">                        return;</span>
+                }
+<span class="fc" id="L238">                pivotIndex = (loBound + hiBound) / 2; // 3 or more items to sort</span>
+<span class="fc" id="L239">                pivotItem = vec[pivotIndex];       </span>
+<span class="fc" id="L240">                vec[pivotIndex] = vec[loBound];</span>
+<span class="fc" id="L241">                vec[loBound] = pivotItem;    </span>
+<span class="fc" id="L242">                pivotKey = pivotItem.key; </span>
+<span class="fc" id="L243">                loSwap = loBound + 1;</span>
+<span class="fc" id="L244">                hiSwap = hiBound;</span>
+                do {
+<span class="fc bfc" id="L246" title="All 4 branches covered.">                        while (loSwap &lt;= hiSwap &amp;&amp; vec[loSwap].key &lt;= pivotKey)</span>
+                            // INVARIANT (prior to test):
+                            // All vec[loBound+1..loSwap-1]
+                            // are &lt;= pivot  &amp;&amp;  loSwap &lt;= hiSwap+1
+<span class="fc" id="L250">                                loSwap++;</span>
+<span class="fc bfc" id="L251" title="All 2 branches covered.">                        while (vec[hiSwap].key &gt; pivotKey)</span>
+                            // INVARIANT (prior to test):
+                            //    All vec[hiSwap+1..hiBound]
+                            //    are &gt; pivot  &amp;&amp;  hiSwap &gt;= loSwap-1
+<span class="fc" id="L255">                                hiSwap--;</span>
+<span class="fc bfc" id="L256" title="All 2 branches covered.">                        if (loSwap &lt; hiSwap) {</span>
+<span class="fc" id="L257">                                temp = vec[loSwap];</span>
+<span class="fc" id="L258">                                vec[loSwap] = vec[hiSwap];</span>
+<span class="fc" id="L259">                                vec[hiSwap] = temp;</span>
+<span class="fc" id="L260">                                loSwap++;</span>
+<span class="fc" id="L261">                                hiSwap--;</span>
+                        }
+                        // INVARIANT: All vec[loBound..loSwap-1] are &lt;= pivot
+                        // &amp;&amp; All vec[hiSwap+1..hiBound] are &gt; pivot
+                        // &amp;&amp; (loSwap &lt; hiSwap) --&gt; 
+                        //                 vec[loSwap] &lt;= pivot &lt; vec[hiSwap]
+                        // &amp;&amp; (loSwap &gt;= hiSwap) --&gt; vec[hiSwap] &lt;= pivot
+                        // &amp;&amp; loBound &lt;= loSwap &lt;= hiSwap+1 &lt;= hiBound+1
+<span class="fc bfc" id="L269" title="All 2 branches covered.">                } while (loSwap &lt;= hiSwap);</span>
+<span class="fc" id="L270">                vec[loBound] = vec[hiSwap];</span>
+<span class="fc" id="L271">                vec[hiSwap] = pivotItem;</span>
+        
+<span class="fc bfc" id="L273" title="All 2 branches covered.">                if (loBound &lt; hiSwap-1)     // 2 or more items in 1st subvec</span>
+<span class="fc" id="L274">                        quickSort(vec, loBound, hiSwap-1);</span>
+        
+<span class="fc bfc" id="L276" title="All 2 branches covered.">                if (hiSwap+1 &lt; hiBound)     // 2 or more items in 2nd subvec</span>
+<span class="fc" id="L277">                        quickSort(vec, hiSwap+1, hiBound);</span>
+<span class="fc" id="L278">        }</span>
+    
+    
+        /**
+         * establishes heap property in a certain range
+         * @param vec the array in which this happens
+         * @param top start of the range
+         * @param bottom end of the range
+         */
+        private static void heapify(Item[] vec, int top, int bottom) {
+                Item temp;
+                int child;
+            
+<span class="fc bfc" id="L291" title="All 2 branches covered.">                if (2*top+1 &gt; bottom) return; // nothing to do </span>
+            
+<span class="fc bfc" id="L293" title="All 2 branches covered.">                if (2*top+2 &gt; bottom) { </span>
+                        // vec[2*top+1] is only child of vec[top]
+<span class="fc" id="L295">                        child = 2*top+1;</span>
+                } else {                  // 2 sons, determine bigger one
+<span class="fc bfc" id="L297" title="All 2 branches covered.">                        if (vec[2*top+1].key &gt; vec[2*top+2].key) {</span>
+<span class="fc" id="L298">                                child = 2*top+1;</span>
+                        } else {
+<span class="fc" id="L300">                                child = 2*top+2;</span>
+                        }
+                }//endif
+            
+                // check if exchange is necessary
+<span class="fc bfc" id="L305" title="All 2 branches covered.">                if (vec[top].key &lt; vec[child].key) {</span>
+<span class="fc" id="L306">                        temp = vec[top]; </span>
+<span class="fc" id="L307">                        vec[top] = vec[child]; </span>
+<span class="fc" id="L308">                        vec[child] = temp;</span>
+                        // recursive call for possible further exchanges
+<span class="fc" id="L310">                        heapify(vec, child, bottom); </span>
+                }//endif
+<span class="fc" id="L312">        }</span>
+    
+        /**
+         * turns array into a heap
+         * @param vec the array to which this happens
+         */
+        private static void createHeap(Item[] vec) {
+<span class="fc bfc" id="L319" title="All 2 branches covered.">                for (int i = vec.length/2 - 1; i &gt;= 0; i--) {</span>
+<span class="fc" id="L320">                        heapify(vec, i, vec.length - 1);</span>
+                }
+<span class="fc" id="L322">        }</span>
+    
+        /**
+         * sorts array by heapsort in a certain range
+         * @param vec the array in which this happens
+         */
+        public static void heapSort(Item[] vec) 
+                                throws NullPointerException {
+<span class="fc bfc" id="L330" title="All 2 branches covered.">                if (vec == null) throw new NullPointerException();</span>
+    
+                Item temp;
+                int last;
+<span class="fc" id="L334">                int n = vec.length;</span>
+            
+<span class="fc" id="L336">                createHeap(vec);</span>
+<span class="fc bfc" id="L337" title="All 2 branches covered.">                for (last = n-1; last &gt; 0; last--) {</span>
+                        // exchange top component with 
+                        // current last component of vec
+<span class="fc" id="L340">                        temp = vec[0]; </span>
+<span class="fc" id="L341">                        vec[0] = vec[last]; </span>
+<span class="fc" id="L342">                        vec[last] = temp;</span>
+                        // call Heapify to to reestablish heap property
+<span class="fc" id="L344">                        heapify(vec, 0, last-1);</span>
+                }//endfor
+<span class="fc" id="L346">        }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

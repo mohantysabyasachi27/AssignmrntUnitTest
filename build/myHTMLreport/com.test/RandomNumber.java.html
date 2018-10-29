@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RandomNumber.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AssignmrntUnitTest</a> &gt; <a href="index.source.html" class="el_package">com.test</a> &gt; <span class="el_source">RandomNumber.java</span></div><h1>RandomNumber.java</h1><pre class="source lang-java linenums">package com.test;
+
+/**
+ *  The &lt;code&gt;RandomNumber&lt;/code&gt; class  offers facilities 
+ *  for pseudorandom number generation.
+ *  &lt;p&gt;
+ *  An instance of this class is used to generate a stream of 
+ *  pseudorandom numbers. The class uses a long seed, which is 
+ *  modified using a linear congruential formula. See &lt;ul&gt;
+ *  &lt;li&gt;Donald Knuth, &lt;i&gt;The Art of Computer Programming, 
+ *  Volume 2&lt;/i&gt;, Section 3.2.1. for general information about
+ *  random number gerneration and 
+ *  &lt;li&gt;S. Park and K. Miller, Random number generators: Good
+ *  ones are hard to find, &lt;i&gt;Comm. ACM&lt;/i&gt; 31 (1988) 1192-1201 
+ *  for the specific one implemented here.  
+ *  &lt;/ul&gt;
+ *  @see java.util.Random
+ *  @see java.lang.Math#random()
+ */
+public class RandomNumber {
+        private static final long MULTIPLIER = 16807;
+        private static final long MODULUS =  2147483647;
+        // Quotient of MODULUS / MULTIPLIER
+        private static final long QUOT = 127773; 
+        // Remainder of MODULUS / MULTIPLIER
+        private static final long REM  = 2836;   
+
+        /**
+         * The current seed of the generator. 
+         */
+        private long currentSeed;
+    
+        /**
+         * Constructs a RandomNumber object and initializes it
+         * with &lt;code&gt;System.currentTimeMillis()&lt;/code&gt;
+         */
+<span class="fc" id="L37">        public RandomNumber() {</span>
+<span class="fc" id="L38">                currentSeed = System.currentTimeMillis() % MODULUS;</span>
+<span class="fc" id="L39">        }</span>
+    
+        /**
+         * Constructs a RandomNumber object and initializes it
+         * with the value &lt;code&gt;seed&lt;/code&gt;
+         * @param seed A value that permits a controlled 
+         * setting of the start seed.
+         */
+<span class="nc" id="L47">        public RandomNumber(long seed) {</span>
+<span class="nc" id="L48">                currentSeed = Math.abs(seed) % MODULUS;</span>
+<span class="nc" id="L49">        }</span>
+                
+        
+        /**
+         * Generates the next random number in the interval [0,1]
+         * @return The next random number in [0,1].
+         */
+        public double nextDoubleRand() {
+<span class="fc" id="L57">                long temp = MULTIPLIER*(currentSeed%QUOT) - </span>
+                                REM*(currentSeed/QUOT);
+<span class="fc bfc" id="L59" title="All 2 branches covered.">                currentSeed = (temp &gt; 0) ? temp : temp + MODULUS;</span>
+<span class="fc" id="L60">                return (double) currentSeed / (double) MODULUS;</span>
+        }
+        
+        /**
+         * Generates a random int value between the given limits.
+         * @param lo The lower bound.
+         * @param hi The upper bound.
+         * @return An integer value in {lo,...,hi}
+         * @throws InvalidOperationException if lo &gt; hi     
+         */
+        public int nextIntRand(int lo, int hi) 
+                                throws InvalidOperationException {
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">                if (lo &gt; hi)</span>
+<span class="nc" id="L73">                        throw new InvalidOperationException(</span>
+                                &quot;invalid range: &quot; + lo + &quot; &gt; &quot; + hi);
+<span class="fc" id="L75">                return (int) (nextDoubleRand() * (hi - lo + 1)  + lo);</span>
+        }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

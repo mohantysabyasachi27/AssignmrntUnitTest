@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.test.code.AlgoTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2018-10-22T08:13:11" hostname="pop-os" time="0.008">
+  <properties/>
+  <testcase name="testHeapUnsorted" classname="com.test.code.AlgoTest" time="0.002"/>
+  <testcase name="testMergeSortEmptyItem" classname="com.test.code.AlgoTest" time="0.0"/>
+  <testcase name="testQuickSortEmptyItem" classname="com.test.code.AlgoTest" time="0.0"/>
+  <testcase name="bubbleUnsortedTest" classname="com.test.code.AlgoTest" time="0.0"/>
+  <testcase name="testQuickUnsorted" classname="com.test.code.AlgoTest" time="0.0"/>
+  <testcase name="testHeapSortEmptyItem" classname="com.test.code.AlgoTest" time="0.0"/>
+  <testcase name="testMergeUnsorted" classname="com.test.code.AlgoTest" time="0.001"/>
+  <testcase name="testSelectionUnsorted" classname="com.test.code.AlgoTest" time="0.0"/>
+  <testcase name="testSelectionSortEmptyItem" classname="com.test.code.AlgoTest" time="0.0"/>
+  <testcase name="testBubbleEmptyItem" classname="com.test.code.AlgoTest" time="0.0"/>
+  <testcase name="testInsertionSortEmptyItem" classname="com.test.code.AlgoTest" time="0.0"/>
+  <testcase name="testInsertionUnsorted" classname="com.test.code.AlgoTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

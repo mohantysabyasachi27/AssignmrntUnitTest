@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SortDemo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AssignmrntUnitTest</a> &gt; <a href="index.source.html" class="el_package">com.test</a> &gt; <span class="el_source">SortDemo.java</span></div><h1>SortDemo.java</h1><pre class="source lang-java linenums">package com.test;
+
+
+// SortDemo.java     
+//                                              
+// Demonstrates various sorting algorithms on an array generated from a
+// text area by StringTokenizer
+//
+// Assumptions: 
+// input is a sequence of n numbers a0, a1, a2 ... 
+// n is the length of an array
+// a0, a1, ... are the sorting keys of the array entries of type Item
+// numbers are separated by white space 
+
+import java.awt.*;
+import java.applet.Applet;
+import java.util.*;   // for class StringTokenizer
+import java.awt.event.ActionListener; 
+import java.awt.event.ActionEvent;
+
+<span class="nc" id="L21">public class SortDemo extends Applet {</span>
+
+<span class="nc" id="L23">		SortTestData data = new SortTestData();</span>
+        private TextArea input, output;  
+        private Button startBtn;
+        private Choice choiceBtn;
+        private Panel p1, p2, p3;
+<span class="nc" id="L28">        private String helpStr = </span>
+                &quot;Please enter an int value or a string of int numbers \n&quot;
+                + &quot;If you only entered one number a randomized \n&quot;
+                + &quot;array will be created.  \n&quot;
+                + &quot;If you give a string of numbers these will be used for sorting.\n\n&quot;
+                + &quot;You can choose the sorting algorithm. \n&quot;;
+                               
+        
+        // setup the graphical user interface components
+        public void init() {
+<span class="nc" id="L38">                setSize(700, 600);</span>
+<span class="nc" id="L39">                setLayout(new FlowLayout(FlowLayout.LEFT));</span>
+<span class="nc" id="L40">                setFont(new Font(&quot;Courier&quot;, Font.PLAIN, 18));</span>
+        
+<span class="nc" id="L42">                p1 = new Panel();</span>
+<span class="nc" id="L43">                p2 = new Panel();</span>
+<span class="nc" id="L44">                p3 = new Panel();</span>
+                
+<span class="nc" id="L46">                p1.setLayout(new FlowLayout(FlowLayout.LEFT));</span>
+                
+<span class="nc" id="L48">                input = new TextArea(&quot;63 24 12 53 72 18 44 80 &quot;, 5, 60);</span>
+<span class="nc" id="L49">                p1.add(input);          // put input on panel</span>
+        
+<span class="nc" id="L51">                p2.setLayout(new FlowLayout(FlowLayout.LEFT));</span>
+               
+                                
+<span class="nc" id="L54">                choiceBtn = new Choice();</span>
+<span class="nc" id="L55">                choiceBtn.setFont(new Font(&quot;Times&quot;, Font.PLAIN, 18));</span>
+<span class="nc" id="L56">                choiceBtn.addItem(&quot;  Bubble Sort  &quot;);</span>
+<span class="nc" id="L57">                choiceBtn.addItem(&quot;  Selection Sort  &quot;);</span>
+<span class="nc" id="L58">                choiceBtn.addItem(&quot;  Insertion Sort  &quot;);</span>
+<span class="nc" id="L59">                choiceBtn.addItem(&quot;  Merge Sort  &quot;);</span>
+<span class="nc" id="L60">                choiceBtn.addItem(&quot;  Quick Sort  &quot;);</span>
+<span class="nc" id="L61">                choiceBtn.addItem(&quot;  Heap Sort  &quot;);</span>
+<span class="nc" id="L62">                choiceBtn.setSize(2000,500);</span>
+<span class="nc" id="L63">                System.out.println(choiceBtn.getSize().toString());</span>
+<span class="nc" id="L64">                p2.add(choiceBtn);</span>
+            
+<span class="nc" id="L66">                startBtn = new Button(&quot;  Start  &quot;);</span>
+<span class="nc" id="L67">                startBtn.setFont(new Font(&quot;Times&quot;, Font.PLAIN, 18));	</span>
+<span class="nc" id="L68">                startBtn.addActionListener(new ActionListener(){</span>
+                        public void actionPerformed(ActionEvent e){
+<span class="nc" id="L70">                                runDemo();</span>
+<span class="nc" id="L71">                        }</span>
+                });
+<span class="nc" id="L73">                p2.add(startBtn);</span>
+                
+<span class="nc" id="L75">                p3.setLayout(new FlowLayout(FlowLayout.LEFT));</span>
+<span class="nc" id="L76">                output = new TextArea(helpStr, 15, 60);</span>
+<span class="nc" id="L77">                p3.add(output);</span>
+                                    
+<span class="nc" id="L79">                add(p1);</span>
+<span class="nc" id="L80">                add(p2);</span>
+<span class="nc" id="L81">                add(p3);</span>
+<span class="nc" id="L82">        }</span>
+        
+        private void readArray(){
+<span class="nc" id="L85">        	 String inputStr = input.getText();</span>
+<span class="nc" id="L86">        	 data.initializeArray(inputStr);</span>
+        	 
+<span class="nc" id="L88">        }</span>
+        
+             
+        // process user's action on the input text field
+        public void displayHelp() {
+<span class="nc" id="L93">                output.setText(helpStr); </span>
+<span class="nc" id="L94">        }</span>
+        
+        public void runDemo() {  
+                try {
+<span class="nc" id="L98">                        output.setText(&quot;&quot;);</span>
+<span class="nc" id="L99">                        long startTime = System.currentTimeMillis();</span>
+<span class="nc" id="L100">                        readArray();              </span>
+<span class="nc" id="L101">                        long endTime = System.currentTimeMillis();</span>
+<span class="nc" id="L102">                        long runTime = endTime - startTime; </span>
+<span class="nc" id="L103">                        String initTime = new String(</span>
+                                &quot;Time to create array: &quot;
+<span class="nc" id="L105">                                + Long.toString(runTime) + &quot; ms\n&quot;);  </span>
+<span class="nc" id="L106">                        output.setText(initTime);  </span>
+                        
+<span class="nc" id="L108">                        int choice = choiceBtn.getSelectedIndex();</span>
+                        
+<span class="nc" id="L110">                        StringBuffer outputBuf = data.runAlgo(choice);</span>
+<span class="nc" id="L111">                        String choiceStr = choiceBtn.getSelectedItem();</span>
+                        
+<span class="nc" id="L113">                        endTime = System.currentTimeMillis();</span>
+<span class="nc" id="L114">                        runTime = endTime - startTime;        </span>
+                            
+                        // Construct the sorting time in a String
+<span class="nc" id="L117">                        String sortTime = new String(</span>
+                                &quot;Time needed for &quot; 
+                                + choiceStr + &quot;: &quot;
+<span class="nc" id="L120">                                + Long.toString(runTime) + &quot; ms\n&quot;);    </span>
+<span class="nc" id="L121">                        output.append(sortTime);    </span>
+                        
+                        
+<span class="nc" id="L124">                        output.setText(initTime + sortTime + &quot;\r&quot; </span>
+<span class="nc" id="L125">                        		+ outputBuf.toString()); </span>
+                        		
+                // check routine
+                
+<span class="nc" id="L129">                 } catch (NoSuchElementException e) {</span>
+<span class="nc" id="L130">       			 System.out.println(&quot;Not enough numbers.&quot;);</span>
+<span class="nc" id="L131">	       	     } catch (NumberFormatException e) {</span>
+<span class="nc" id="L132">	       	    	 System.out.println(&quot;Please only use integer values. &quot;);</span>
+<span class="nc" id="L133">	       	     } catch (NegativeArraySizeException e) {</span>
+<span class="nc" id="L134">	       	    	 System.out.println(&quot;Negative Array Size.&quot;);</span>
+<span class="nc" id="L135">	       	     }      </span>
+<span class="nc" id="L136">        }        		</span>
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
